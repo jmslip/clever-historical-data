@@ -1,7 +1,7 @@
 from django.db import models
 
 class HistoricalData(models.Model):
-    data_historico = models.DateTimeField('Data')
+    data_historico = models.DateField('Data')
     ultimo = models.FloatField('Último')
     variacao = models.FloatField('Var%')
     ativo = models.CharField('Ativo', max_length=100)
