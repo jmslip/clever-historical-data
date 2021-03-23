@@ -6,7 +6,6 @@ class Server:
     def __init__(self) -> None:
         self.app = Flask(__name__, instance_relative_config=True)
         self.app.config.from_pyfile('config.py')
-        self.banco = ''
         self.api = Api(
             self.app,
             version='0.0.1',

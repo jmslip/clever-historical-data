@@ -1,15 +1,12 @@
 from core.server import server
+from flask_migrate import Migrate
 
 import resources.historico
 
 app = server.app
 
-@app.before_first_request
-def cria_banco():
-    db.create_all()
+if __name__ == '__main__':    
+    from core import models
 
-
-if __name__ == '__main__':
-    from core.db import db
-    db.init_app(app)
+    models.initialize()
     server.run()
