@@ -1,4 +1,3 @@
-import re
 from flask_restplus import Resource
 
 from service.historico import HistoricoService
