@@ -42,4 +42,5 @@ class Historico(Resource):
 
             return HistoricoService().passado(ativo=simbolo, from_date=data_inicio, to_date=data_fim)
 
-            # TODO necessário criar estrutura else caso não seja tipo recente ou passado.
+        else:
+            return clever_generics.gera_resposta(clever_generics.err04)
