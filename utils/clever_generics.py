@@ -1,3 +1,7 @@
+from datetime import datetime
+from json import dumps, loads
+
+
 class CleverGenerics:
 
     def __init__(self) -> None:
@@ -20,6 +24,10 @@ class CleverGenerics:
                 status = self.http_response_400
             elif mensagem.startswith(self.err03):
                 status = self.http_response_204
+            else:
+                status = self.http_response_400
+        else:
+            status = self.http_response_400
 
         if parametro is not None:
             mensagem = mensagem + ": Parametro obrigatório"
@@ -30,4 +38,25 @@ class CleverGenerics:
         if parametro is not None:
             response['parametro'] = parametro
         
-        return response
+        return response, status
+
+
+    def valida_parametros_obrigatorios(self, request, parametros):
+        for param in parametros:
+            return self.valida_campo_requisicao(request=request, campo=param)
+
+
+    def valida_campo_requisicao(self, request, campo):
+        if campo not in request:
+            return self.gera_resposta(self.err01, campo)
+
+
+    def model_to_json(self, modelResult, model):
+        strResult = dumps(modelResult.select().where(model.id == modelResult.id).dicts().get(), default=self.dt_parser)
+
+        return loads(strResult)
+
+
+    def dt_parser(self, dt):
+        if isinstance(dt, datetime):
+            return dt.isoformat()

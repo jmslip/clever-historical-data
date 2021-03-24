@@ -19,5 +19,8 @@ class Ativos():
             dados = search_quotes(text=ativo, countries=[self.pais])
         except ValueError:
             return self.generics.gera_resposta(self.generics.err03+'Ativo '+ ativo +' não encontrado')
+        except RuntimeError as e:
+            return self.generics.gera_resposta('{0}'.format(e))
+
         
         return dados

@@ -1,3 +1,4 @@
+from enum import unique
 from peewee import Model, AutoField, CharField, BigAutoField, DateField, DateTimeField, DecimalField, ForeignKeyField
 from datetime import datetime
 
@@ -15,7 +16,7 @@ class CleverBaseModel(Model):
 class Ativo(CleverBaseModel):
 
     id = AutoField(index_type='BRIN')
-    simbolo = CharField(max_length=50)
+    simbolo = CharField(max_length=50, unique=True)
     nome = CharField(max_length=100)
     pais = CharField(max_length=50)
 
@@ -26,7 +27,7 @@ class HistoricalData(CleverBaseModel):
     data_historico = DateField()
     ultimo = DecimalField(decimal_places=2)
     variacao = DecimalField(decimal_places=4)
-    ativo = ForeignKeyField(Ativo, related_name='historicos')
+    ativo = ForeignKeyField(Ativo, backref='historicos')
 
 def initialize():
     banco.connect()
