@@ -15,7 +15,7 @@ class Ativos():
         if ativo is None:
             return self.generics.gera_resposta(mensagem=self.generics.err02, parametro='ativo')
 
-        try:
+        try: # FIXME procusa sempre é realizada pelo self.pais
             dados = search_quotes(text=ativo, countries=[self.pais])
         except ValueError:
             return self.generics.gera_resposta(self.generics.err03+'Ativo '+ ativo +' não encontrado')
