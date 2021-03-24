@@ -41,3 +41,5 @@ class Historico(Resource):
             data_fim = response['data_fim']
 
             return HistoricoService().passado(ativo=simbolo, from_date=data_inicio, to_date=data_fim)
+
+            # TODO necessário criar estrutura else caso não seja tipo recente ou passado.
