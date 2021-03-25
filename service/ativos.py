@@ -1,6 +1,7 @@
 from investpy import search_quotes
 
 from utils.clever_generics import CleverGenerics
+from core.models import Ativo as AtivoModel
 
 
 class Ativos():
@@ -25,5 +26,8 @@ class Ativos():
         except RuntimeError as e:
             return self.generics.gera_resposta('{0}'.format(e))
 
-        
         return dados
+
+
+    def all_ativos_banco(self):
+        return (AtivoModel().select()).dicts()

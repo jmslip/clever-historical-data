@@ -1,4 +1,3 @@
-from enum import unique
 from peewee import Model, AutoField, CharField, BigAutoField, DateField, DateTimeField, DecimalField, ForeignKeyField
 from datetime import datetime
 
@@ -29,6 +28,16 @@ class HistoricalData(CleverBaseModel):
     variacao = DecimalField(decimal_places=4)
     ativo = ForeignKeyField(Ativo, backref='historicos')
 
+    class Meta:
+        indexes = (
+            # cria index para data/ativo
+            (('data_historico', 'ativo'), True),
+        )
+
 def initialize():
     banco.connect()
     banco.create_tables([Ativo, HistoricalData], safe=True)
+
+
+def close_connection():
+    banco.close()
