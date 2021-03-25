@@ -1,5 +1,10 @@
 from datetime import datetime
-from json import dumps, loads
+import decimal
+from json import dumps, loads, JSONEncoder
+from typing import Any
+
+from core.models import CleverBaseModel, HistoricalData, Ativo as AtivoModel
+from core.serializable import HistoricoSerializable, AtivoSerializable
 
 
 class CleverGenerics:
@@ -51,6 +56,15 @@ class CleverGenerics:
             return self.gera_resposta(self.err01, campo)
 
 
+    def convert_model_to_json(self, model: CleverBaseModel):
+        if isinstance(model, HistoricalData):
+            historico = HistoricoSerializable(model)
+            return historico.to_json()
+        elif isinstance(model, AtivoModel):
+            ativo = AtivoSerializable(model)
+            return ativo.to_json()
+
+
     def model_to_json(self, modelResult, model):
         strResult = dumps(modelResult.select().where(model.id == modelResult.id).dicts().get(), default=self.dt_parser)
 
@@ -60,3 +74,5 @@ class CleverGenerics:
     def dt_parser(self, dt):
         if isinstance(dt, datetime):
             return dt.isoformat()
+        elif isinstance(dt, float):
+            return round(dt, 2)
