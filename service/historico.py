@@ -4,6 +4,7 @@ from json import loads
 from service.ativos import Ativos
 from core.models import HistoricalData
 from core.models import Ativo as AtivoModel
+from utils import clever_generics
 from utils.clever_generics import CleverGenerics
 
 
@@ -17,6 +18,7 @@ class HistoricoService:
         self.str_close = 'Close'
         self.str_simbolo = 'simbolo'
         self.clever_generics = CleverGenerics()
+
 
     def recente_com_var(self, dados, ativo):
         historico = dict()
@@ -65,11 +67,11 @@ class HistoricoService:
         # if to_json:
         #     return loads(historico.to_json(orient='index', date_format='iso', compression='gzip'))
         ativo = AtivoModel.select().where(AtivoModel.simbolo == ativo).get()
-        hist = HistoricalData().select().where(HistoricalData.data_historico >= from_date, 
+        historico_db = HistoricalData().select().where(HistoricalData.data_historico >= from_date, 
                                                     HistoricalData.data_historico <= to_date, 
-                                                    HistoricalData.ativo == ativo).get()
+                                                    HistoricalData.ativo == ativo)
         
-        return self.clever_generics.convert_model_to_json(hist)
+        return self.clever_generics.list_model_to_json(dados_model=historico_db, chave_dicionario='historico')
         
 
     

@@ -71,6 +71,20 @@ class CleverGenerics:
         return loads(strResult)
 
 
+    def list_model_to_json(self, dados_model: CleverBaseModel, chave_dicionario=None):
+        dados = []
+        for dado in dados_model:
+            dados.append(self.convert_model_to_json(dado))
+
+        if chave_dicionario is not None:
+            dados_dict = dict()
+            dados_dict[chave_dicionario] = dados
+
+            return dados_dict
+
+        return dados
+
+
     def dt_parser(self, dt):
         if isinstance(dt, datetime):
             return dt.isoformat()
