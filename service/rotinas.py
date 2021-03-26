@@ -26,6 +26,7 @@ class Rotina():
 
         historicoModel = HistoricoModel()
         is_save = False
+        has_ativo_bd = False
         for ativo in all_ativos:
             dados = self.dados_historicos.recente(ativo=ativo['simbolo'])
             for simbolo, dado in dados.items():
@@ -34,10 +35,12 @@ class Rotina():
                         AtivoModel.select()
                                 .join(HistoricoModel)
                                 .where(HistoricoModel.data_historico == data, AtivoModel.simbolo == simbolo)
-                                .get()
                     )
 
-                    if historico_ativo is None:
+                    for ativo_db in historico_ativo:
+                        has_ativo_bd = True
+
+                    if not has_ativo_bd:
                         is_save = True
                         historicoModel = HistoricoModel(
                             data_historico = data,
@@ -51,10 +54,10 @@ class Rotina():
                     historicoModel.save()
             except IntegrityError as integrity:
                 print(integrity)
-                # return self.clever_generics.gera_resposta(self.clever_generics.err04)
+                return self.clever_generics.gera_resposta(self.clever_generics.err04)
             except InternalError as internal:
                 print(internal)
-                # return self.clever_generics.gera_resposta(self.clever_generics.err04)
+                return self.clever_generics.gera_resposta(self.clever_generics.err04)
             
             close_connection()
 

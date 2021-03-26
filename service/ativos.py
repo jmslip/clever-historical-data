@@ -9,6 +9,7 @@ class Ativos():
         self.pais = 'Brazil'
         self.generics = CleverGenerics()
 
+
     def pesquisa(self, ativo, pais = None):
         if pais is not None:
             if pais is not isinstance(pais, str):
@@ -29,5 +30,7 @@ class Ativos():
         return dados
 
 
-    def all_ativos_banco(self):
-        return (AtivoModel().select()).dicts()
+    def all_ativos_banco(self, to_dict=True):
+        if to_dict:
+            return (AtivoModel().select()).dicts()
+        return AtivoModel().select()

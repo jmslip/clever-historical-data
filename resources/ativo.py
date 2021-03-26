@@ -1,5 +1,5 @@
 from flask_restplus import Resource
-from peewee import IntegrityError
+from peewee import IntegrityError, fn
 from json import dumps, loads
 
 from core.server import server
@@ -10,6 +10,7 @@ from service.ativos import Ativos
 app = server.app
 api = server.api
 clever_generics = CleverGenerics()
+ativosService = Ativos()
 
 parametros = ['simbolo', 'pais']
 parametros_obrigatorios = ['simbolo']
@@ -32,7 +33,7 @@ class Ativo(Resource):
         if 'pais' in request:
             pais = request['pais']
 
-        pesquisa = Ativos().pesquisa(ativo=simbolo, pais=pais)
+        pesquisa = ativosService.pesquisa(ativo=simbolo, pais=pais)
 
         if isinstance(pesquisa, str):
             return pesquisa
@@ -52,4 +53,30 @@ class Ativo(Resource):
             return clever_generics.gera_resposta(clever_generics.err04)
 
         return clever_generics.model_to_json(ativoModel, AtivoModel)
+
+    @staticmethod
+    def get():
+        request = api.payload
+        simbolo = pais = None
+        pesquisa_simbolo = pesquisa_pais = False
+
+        if request is not None:
+            if 'simbolo' in request:
+                simbolo = request['simbolo']
+                pesquisa_simbolo = True
+
+            if 'pais' in request:
+                pais = request['pais']
+                pesquisa_pais = True
+
+        if pesquisa_simbolo and pesquisa_pais:
+            ativos = AtivoModel().select().where(fn.LOWER(AtivoModel.simbolo) == fn.LOWER(simbolo), fn.LOWER(AtivoModel.pais) == fn.LOWER(pais))
+        elif pesquisa_simbolo and not pesquisa_pais:
+            ativos = AtivoModel().select().where(fn.LOWER(AtivoModel.simbolo) == fn.LOWER(simbolo))
+        elif not pesquisa_simbolo and pesquisa_pais:
+            ativos = AtivoModel().select().where(fn.LOWER(AtivoModel.pais) == fn.LOWER(pais))
+        else:
+            ativos = ativosService.all_ativos_banco(to_dict=False)         
+        
+        return clever_generics.list_model_to_json(dados_model=ativos, chave_dicionario='ativos')
         
