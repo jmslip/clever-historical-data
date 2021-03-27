@@ -4,7 +4,7 @@ from flask_restplus import Api
 
 class Server:
     def __init__(self) -> None:
-        self.app = Flask(__name__, instance_relative_config=True)
+        self.app = Flask(__name__)
         self.app.config.from_pyfile('config.py')
         self.api = Api(
             self.app,
