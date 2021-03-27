@@ -9,6 +9,7 @@ click==7.1.2
 Flask==1.1.2
 flask-restplus==0.13.0
 greenlet==1.0.0
+gunicorn==20.0.4
 idna==2.10
 investpy==1.0.3
 itsdangerous==1.1.0
