@@ -1,6 +1,6 @@
 from playhouse.pool import PooledPostgresqlDatabase
 
-from instance.config import DB_ADDR, DB_NAME, DB_PASS, DB_USER
+from core.config import DB_ADDR, DB_NAME, DB_PASS, DB_USER
 
 class DB:
 
