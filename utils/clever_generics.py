@@ -17,7 +17,9 @@ class CleverGenerics:
         self.err03 = 'ERR#03: Registro não encontrado'
         self.err04 = 'ERR#04: Erro ao processar'
         self.err05 = 'ERR#05: Resgistro duplicado'
+        self.suc201 = ''
         self.http_response_200 = 200
+        self.http_response_201 = 201
         self.http_response_204 = 204
         self.http_response_400 = 400
 
@@ -32,6 +34,8 @@ class CleverGenerics:
                 status = self.http_response_400
             elif mensagem.startswith(self.err03):
                 status = self.http_response_204
+            elif "sucesso".lower() in mensagem:
+                status = self.http_response_201
             else:
                 status = self.http_response_400
         else:

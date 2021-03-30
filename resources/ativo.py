@@ -60,6 +60,7 @@ class Ativo(Resource):
             return clever_generics.gera_resposta(clever_generics.err04)
 
         return clever_generics.model_to_json(ativoModel, AtivoModel), 201
+        
 
     @staticmethod
     def get():
