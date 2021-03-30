@@ -10,7 +10,7 @@ class Server:
             self.app,
             version='0.0.2',
             title='Clever Historical Data',
-            description='Api de web scraping para realizar atualização de dados históricos dos ativos (Mercado financeiro)',
+            description='Api para realizar atualização de dados históricos dos ativos (Mercado financeiro)',
             doc='/docs'
         )
     
