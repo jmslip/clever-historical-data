@@ -1,7 +1,9 @@
 from datetime import datetime
 import decimal
-from json import dumps, loads, JSONEncoder
+from json import dumps, loads
 from typing import Any
+
+from peewee import DoesNotExist
 
 from core.models import CleverBaseModel, HistoricalData, Ativo as AtivoModel
 from core.serializable import HistoricoSerializable, AtivoSerializable
@@ -10,15 +12,16 @@ from core.serializable import HistoricoSerializable, AtivoSerializable
 class CleverGenerics:
 
     def __init__(self) -> None:
-        self.err01 = 'ERR#01'
-        self.err02 = 'ERR#02'
-        self.err03 = 'ERR#03'
+        self.err01 = 'ERR#01: Campo obrigatório'
+        self.err02 = 'ERR#02: Valor não pode ser nulo'
+        self.err03 = 'ERR#03: Registro não encontrado'
         self.err04 = 'ERR#04: Erro ao processar'
+        self.err05 = 'ERR#05: Resgistro duplicado'
         self.http_response_200 = 200
         self.http_response_204 = 204
         self.http_response_400 = 400
 
-    def gera_resposta(self, mensagem, parametro=None):
+    def gera_resposta(self, mensagem, parametro=None, id=None):
         response = {}
         status = self.http_response_200
         if mensagem is None:
@@ -42,6 +45,9 @@ class CleverGenerics:
 
         if parametro is not None:
             response['parametro'] = parametro
+
+        if id is not None:
+            response['id'] = id
         
         return response, status
 
@@ -65,8 +71,13 @@ class CleverGenerics:
             return ativo.to_json()
 
 
-    def model_to_json(self, modelResult, model):
-        strResult = dumps(modelResult.select().where(model.id == modelResult.id).dicts().get(), default=self.dt_parser)
+    def model_to_json(self, modelResult, model: CleverBaseModel):
+        strResult: str
+        try:
+            strResult = dumps(modelResult.select().where(model.id == modelResult.id).dicts().get(), default=self.dt_parser)
+        except DoesNotExist as e:
+            print("Erro ao buscar informações do Ativo: ", e)
+            return self.gera_resposta(self.err04)
 
         return loads(strResult)
 

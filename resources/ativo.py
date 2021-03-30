@@ -6,6 +6,7 @@ from core.server import server
 from core.models import Ativo as AtivoModel
 from utils.clever_generics import CleverGenerics
 from service.ativos import Ativos
+from core.models import close_connection
 
 app = server.app
 api = server.api
@@ -42,17 +43,23 @@ class Ativo(Resource):
         if isinstance(pesquisa, list):
             for ativo in pesquisa:
                 ativoModel = AtivoModel(
+                    id = ativo.id_,
                     simbolo = ativo.symbol,
                     nome = ativo.name,
                     pais = ativo.country
                 )
 
         try:
-            ativoModel.save()
-        except IntegrityError:
+            ativoModel.save(force_insert=True)
+        except IntegrityError as e:
+            print("Erro ao salvar Ativo: ", e)
+            error = e.args
+            for err in error:
+                if 'duplicate key' in err:
+                    return clever_generics.gera_resposta(clever_generics.err05, id=ativoModel.get_id())
             return clever_generics.gera_resposta(clever_generics.err04)
 
-        return clever_generics.model_to_json(ativoModel, AtivoModel)
+        return clever_generics.model_to_json(ativoModel, AtivoModel), 201
 
     @staticmethod
     def get():

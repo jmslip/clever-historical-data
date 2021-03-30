@@ -1,4 +1,4 @@
-from peewee import Model, AutoField, CharField, BigAutoField, DateField, DateTimeField, DecimalField, ForeignKeyField
+from peewee import IntegerField, Model, AutoField, CharField, BigAutoField, DateField, DateTimeField, DecimalField, ForeignKeyField
 from datetime import datetime
 
 from core.db import DB
@@ -14,8 +14,8 @@ class CleverBaseModel(Model):
 
 class Ativo(CleverBaseModel):
 
-    id = AutoField(index_type='BRIN')
-    simbolo = CharField(max_length=50, unique=True)
+    id = IntegerField(primary_key=True)
+    simbolo = CharField(max_length=50, unique=True, index=True)
     nome = CharField(max_length=100)
     pais = CharField(max_length=50)
 
