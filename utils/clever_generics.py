@@ -15,7 +15,6 @@ class CleverGenerics:
         self.err03 = 'ERR#03: Registro não encontrado'
         self.err04 = 'ERR#04: Erro ao processar'
         self.err05 = 'ERR#05: Resgistro duplicado'
-        self.suc201 = ''
         self.http_response_200 = 200
         self.http_response_201 = 201
         self.http_response_204 = 204
