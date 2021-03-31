@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 import decimal
 from json import dumps, loads
 from typing import Any
@@ -101,7 +101,12 @@ class CleverGenerics:
 
 
     def dt_parser(self, dt):
-        if isinstance(dt, datetime):
+        if isinstance(dt, datetime) or isinstance(dt, date):
             return dt.isoformat()
         elif isinstance(dt, float):
             return round(dt, 2)
+
+
+    def data_formato_br(self, dt):
+        if isinstance(dt, datetime) or isinstance(dt, date):
+            return dt.strftime("%d/%m/%Y")

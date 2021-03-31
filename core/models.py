@@ -24,7 +24,7 @@ class Ativo(CleverBaseModel):
 class HistoricalData(CleverBaseModel):
 
     id = BigAutoField(index_type='BRIN')
-    data_historico = DateField(unique=True)
+    data_historico = DateField()
     variacao = DecimalField(decimal_places=4)
     ativo = ForeignKeyField(Ativo, backref='historicos')
 

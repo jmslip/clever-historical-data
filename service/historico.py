@@ -1,5 +1,5 @@
 from datetime import datetime
-from json import loads
+from json import loads, dumps
 
 from peewee import IntegrityError, Select
 
@@ -67,7 +67,7 @@ class HistoricoService:
         return self.clever_generics.list_model_to_json(dados_model=historico_db, chave_dicionario='historico')
 
 
-    def passado_data(self, ativo, from_date, to_date, to_json=True):
+    def passado_data(self, ativo: str, from_date, to_date, to_json=True):
         pesquisa = Ativos().pesquisa(ativo)
 
         historico = 0
@@ -76,7 +76,20 @@ class HistoricoService:
             historico = hist.retrieve_historical_data(from_date=from_date, to_date=to_date)
 
         if to_json:
-            return loads(historico.to_json(orient='index', date_format='iso', compression='gzip'))
+            dados = loads(historico.to_json(orient='index', date_format='iso', compression='gzip'))
+            keys = list(dados)
+            dado_atualizado_var = list()
+            for i in range(len(dados)):
+                if i >= (len(dados) - 1):
+                    break
+                valores_var = dict()
+                valores_var[keys[i]] = dados[keys[i]]
+                valores_var[keys[i+1]] = dados[keys[i+1]]
+                dado_atualizado_var.append(self.recente_com_var(dados=valores_var, ativo=ativo))
+
+            return loads(dumps(dado_atualizado_var))
+
+        return historico
 
     
     def calc_var(self, ultimo, ultimo_ontem):
