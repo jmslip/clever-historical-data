@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 
@@ -20,15 +20,19 @@ class Rotina():
         self.clever_generics = CleverGenerics()
 
     
-    def atualiza_historico_por_data(self, to_date, from_date, ativo=None):
+    def atualiza_historico_por_data(self, from_date, to_date, ativo=None):
         if ativo is not None:
             ativos_atualizar = ativo
         else:
             ativos_atualizar = self.ativos.all_ativos_banco()
 
         for ativo in ativos_atualizar:
-            dados = self.dados_historicos.passado_data(ativo=ativo, from_date=from_date, to_date=to_date)
-            self.persiste_dados_historico_ativo(dados)
+            dados = self.dados_historicos.passado_data(ativo=ativo['simbolo'], from_date=from_date, to_date=to_date)
+
+            for item in dados:
+                self.persiste_dados_historico_ativo(item)
+        
+        return True
 
     
     def atualiza_historico(self):
@@ -75,7 +79,7 @@ class Rotina():
 
     def persiste_dados_historico_ativo(self, dados):
         historicoModel = HistoricoModel()
-        existe_ativo_bd: bool
+        existe_ativo_bd: bool = False
         is_save: bool
 
         for simbolo, dado in dados.items():
@@ -109,6 +113,7 @@ class Rotina():
             return self.clever_generics.gera_resposta(self.clever_generics.err04)
         
         close_connection()
+        return True
 
 
     def add_job(self, function, scheduler: BackgroundScheduler = None, trigger='cron', **kwargs) -> BackgroundScheduler:
@@ -118,6 +123,16 @@ class Rotina():
         scheduler.add_job(func=function, trigger=trigger, day="*", hour='1', minute="30")
 
         return scheduler
+
+
+    def get_ultima_data_historico(self, ativo: str = None) -> date:
+        if ativo is not None:
+            ativo = ativo.upper()
+            ultima_data = HistoricoModel.select(HistoricoModel.data_historico).join(AtivoModel).where(AtivoModel.simbolo == ativo).order_by(HistoricoModel.data_historico.desc()).limit(1).get()
+        else:
+            ultima_data = HistoricoModel.select(HistoricoModel.data_historico).order_by(HistoricoModel.data_historico.desc()).limit(1).get()
+        
+        return ultima_data.data_historico
 
 
     def start_jobs(self, scheduler: BackgroundScheduler):
