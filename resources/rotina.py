@@ -11,3 +11,8 @@ class Rotina(Resource):
     def get():
         RotinaService().atualiza_historico()
         return {}
+
+    
+    def post(self):
+        # TODO implementar atualização de dados retroativos
+        ...
