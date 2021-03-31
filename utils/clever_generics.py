@@ -1,7 +1,5 @@
-from datetime import datetime
-import decimal
+from datetime import date, datetime
 from json import dumps, loads
-from typing import Any
 
 from peewee import DoesNotExist
 
@@ -17,7 +15,6 @@ class CleverGenerics:
         self.err03 = 'ERR#03: Registro não encontrado'
         self.err04 = 'ERR#04: Erro ao processar'
         self.err05 = 'ERR#05: Resgistro duplicado'
-        self.suc201 = ''
         self.http_response_200 = 200
         self.http_response_201 = 201
         self.http_response_204 = 204
@@ -101,7 +98,12 @@ class CleverGenerics:
 
 
     def dt_parser(self, dt):
-        if isinstance(dt, datetime):
+        if isinstance(dt, datetime) or isinstance(dt, date):
             return dt.isoformat()
         elif isinstance(dt, float):
             return round(dt, 2)
+
+
+    def data_formato_br(self, dt):
+        if isinstance(dt, datetime) or isinstance(dt, date):
+            return dt.strftime("%d/%m/%Y")
