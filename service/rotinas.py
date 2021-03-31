@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 

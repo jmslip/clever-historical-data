@@ -1,12 +1,8 @@
-from datetime import datetime
 from json import loads, dumps
-
-from peewee import IntegrityError, Select
 
 from service.ativos import Ativos
 from core.models import HistoricalData
 from core.models import Ativo as AtivoModel
-from utils import clever_generics
 from utils.clever_generics import CleverGenerics
 
 

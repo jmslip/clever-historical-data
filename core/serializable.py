@@ -1,7 +1,4 @@
-import decimal
 from json import dumps, loads
-from json.encoder import JSONEncoder
-from typing import Any
 
 from core.models import Ativo as AtivoModel, HistoricalData as HistoricoModel
 
@@ -30,7 +27,6 @@ class HistoricoSerializable:
     def __init__(self, historicoModel: HistoricoModel) -> None:
         self.data_criacao = historicoModel.created
         self.data_historico = historicoModel.data_historico
-        self.ultimo = historicoModel.ultimo
         self.variacao = historicoModel.variacao
         self.ativo = AtivoSerializable(historicoModel.ativo)
 
@@ -39,7 +35,6 @@ class HistoricoSerializable:
         dicionario = {
             "data_criacao": self.data_criacao.isoformat(),
             "data_historico": self.data_historico.isoformat(),
-            "ultimo": str(self.ultimo),
             "variacao": str(self.variacao),
             "ativo": self.ativo.to_json()
         }
