@@ -1,6 +1,8 @@
 from datetime import datetime
 from json import loads
 
+from peewee import IntegrityError, Select
+
 from service.ativos import Ativos
 from core.models import HistoricalData
 from core.models import Ativo as AtivoModel
@@ -56,23 +58,25 @@ class HistoricoService:
         return historico
 
     
-    def passado(self, ativo, from_date, to_date, to_json=True):
-        # pesquisa = Ativos().pesquisa(ativo)
-
-        # historico = 0
-
-        # for hist in pesquisa:
-        #     historico = hist.retrieve_historical_data(from_date=from_date, to_date=to_date)
-
-        # if to_json:
-        #     return loads(historico.to_json(orient='index', date_format='iso', compression='gzip'))
+    def passado(self, ativo, from_date, to_date):
         ativo = AtivoModel.select().where(AtivoModel.simbolo == ativo).get()
         historico_db = HistoricalData().select().where(HistoricalData.data_historico >= from_date, 
                                                     HistoricalData.data_historico <= to_date, 
                                                     HistoricalData.ativo == ativo)
         
         return self.clever_generics.list_model_to_json(dados_model=historico_db, chave_dicionario='historico')
-        
+
+
+    def passado_data(self, ativo, from_date, to_date, to_json=True):
+        pesquisa = Ativos().pesquisa(ativo)
+
+        historico = 0
+
+        for hist in pesquisa:
+            historico = hist.retrieve_historical_data(from_date=from_date, to_date=to_date)
+
+        if to_json:
+            return loads(historico.to_json(orient='index', date_format='iso', compression='gzip'))
 
     
     def calc_var(self, ultimo, ultimo_ontem):
