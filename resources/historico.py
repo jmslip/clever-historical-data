@@ -85,7 +85,11 @@ class Historico(Resource):
                     historicoModel.save()
                 except IntegrityError as e:
                     print("Erro ao salvar histórico: ", e)
+                    error = e.args
+                    for err in error:
+                        if 'duplicate key' in err:
+                            return clever_generics.gera_resposta(clever_generics.err05)
                     return clever_generics.gera_resposta(clever_generics.err04)
         
-        return clever_generics.gera_resposta("Importado com sucesso!!!"), 201
+        return clever_generics.gera_resposta("Importado com sucesso!!!")
         
