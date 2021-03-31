@@ -1,5 +1,4 @@
-from enum import unique
-from peewee import IntegerField, Model, AutoField, CharField, BigAutoField, DateField, DateTimeField, DecimalField, ForeignKeyField
+from peewee import IntegerField, Model, CharField, BigAutoField, DateField, DateTimeField, DecimalField, ForeignKeyField
 from datetime import datetime
 
 from core.db import DB
