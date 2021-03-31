@@ -1,7 +1,4 @@
-import decimal
 from json import dumps, loads
-from json.encoder import JSONEncoder
-from typing import Any
 
 from core.models import Ativo as AtivoModel, HistoricalData as HistoricoModel
 

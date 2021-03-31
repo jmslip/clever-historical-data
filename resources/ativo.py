@@ -1,12 +1,10 @@
 from flask_restplus import Resource
 from peewee import IntegrityError, fn
-from json import dumps, loads
 
 from core.server import server
 from core.models import Ativo as AtivoModel
 from utils.clever_generics import CleverGenerics
 from service.ativos import Ativos
-from core.models import close_connection
 
 app = server.app
 api = server.api
