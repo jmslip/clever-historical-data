@@ -42,10 +42,7 @@ class HistoricoService:
     def recente(self, ativo, to_json=True):
         pesquisa = Ativos().pesquisa(ativo)
 
-        historico = 0
-
-        for hist in pesquisa:
-            historico = hist.retrieve_recent_data().tail(2)
+        historico = pesquisa.retrieve_recent_data().tail(2)
 
         if to_json:
             dados = loads(historico.to_json(orient='index', date_format='iso', compression='gzip'))
