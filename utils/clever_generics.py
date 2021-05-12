@@ -59,7 +59,7 @@ class CleverGenerics:
 
 
     def valida_campo_requisicao(self, request, campo):
-        if campo not in request:
+        if request is None or campo not in request:
             return self.gera_resposta(self.err01, campo)
 
 
