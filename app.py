@@ -3,6 +3,7 @@ from core.server import server
 import resources.historico
 import resources.ativo
 import resources.rotina
+import resources.calculos
 
 app = server.app
 

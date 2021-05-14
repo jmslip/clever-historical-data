@@ -63,8 +63,9 @@ class Ativo(Resource):
     @staticmethod
     def get():
         request = api.payload
-        simbolo = pais = None
-        pesquisa_simbolo = pesquisa_pais = False
+        simbolo = pais = clever = None
+        pesquisa_simbolo = pesquisa_pais = pesquisa_clever = False
+        lista_simbolos_clever = list()
 
         if request is not None:
             if 'simbolo' in request:
@@ -74,6 +75,14 @@ class Ativo(Resource):
             if 'pais' in request:
                 pais = request['pais']
                 pesquisa_pais = True
+
+            if 'clever' in request:
+                pesquisa_clever = True
+
+        if pesquisa_clever:
+            ativos = AtivoModel().select().where(AtivoModel.inflacao != 'S')
+            return clever_generics.list_model_to_json(dados_model=ativos, chave_dicionario='ativos')
+
 
         if pesquisa_simbolo and pesquisa_pais:
             ativos = AtivoModel().select().where(fn.LOWER(AtivoModel.simbolo) == fn.LOWER(simbolo), fn.LOWER(AtivoModel.pais) == fn.LOWER(pais))
