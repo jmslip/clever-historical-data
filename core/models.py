@@ -18,6 +18,7 @@ class Ativo(CleverBaseModel):
     simbolo = CharField(max_length=50, unique=True, index=True)
     nome = CharField(max_length=100)
     pais = CharField(max_length=50)
+    inflacao = CharField(max_length=1, default='N')
 
 
 class HistoricalData(CleverBaseModel):
