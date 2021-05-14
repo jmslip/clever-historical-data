@@ -8,7 +8,7 @@ class Server:
         self.app.config.from_pyfile('config.py')
         self.api = Api(
             self.app,
-            version='0.1.0',
+            version='0.2.0-SNAPSHOT',
             title='Clever Historical Data',
             description='Api para realizar atualização de dados históricos dos ativos (Mercado financeiro)',
             doc='/docs'
