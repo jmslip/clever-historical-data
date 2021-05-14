@@ -51,13 +51,16 @@ class HistoricoService:
         return historico
 
     
-    def passado(self, ativo, from_date, to_date):
+    def passado(self, ativo, from_date, to_date, model_to_json=True):
         ativo = AtivoModel.select().where(AtivoModel.simbolo == ativo).get()
         historico_db = HistoricalData().select().where(HistoricalData.data_historico >= from_date, 
                                                     HistoricalData.data_historico <= to_date, 
                                                     HistoricalData.ativo == ativo)
         
-        return self.clever_generics.list_model_to_json(dados_model=historico_db, chave_dicionario='historico')
+        if model_to_json:
+            return self.clever_generics.list_model_to_json(dados_model=historico_db, chave_dicionario='historico')
+        else:
+            return historico_db
 
 
     def passado_data(self, ativo: str, from_date, to_date, to_json=True):
