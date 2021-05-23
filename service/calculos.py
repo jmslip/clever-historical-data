@@ -12,8 +12,8 @@ class Calculos:
         self.clever_generics = CleverGenerics()
 
     def rd(self, ativos):
-        from_date = self.clever_generics.data_formato_br((datetime.today() + timedelta(days=-365*2)))
-        to_date = self.clever_generics.data_formato_br(datetime.today())
+        from_date = self.clever_generics.data_formato_banco((datetime.today() + timedelta(days=-365*2)))
+        to_date = self.clever_generics.data_formato_banco(datetime.today())
         historico = dict()
         for ativo in ativos:
             historico[ativo] = self.historicoService.passado(ativo, to_date=to_date, from_date=from_date, model_to_json=True)
@@ -51,7 +51,6 @@ class Calculos:
                 maior = aux
         
         for chave in historicoVariacao:
-            print(chave + " : " + str(len(historicoVariacao[chave])))
             if len(historicoVariacao[chave]) < maior:
                 for i in range(maior - len(historicoVariacao[chave])):
                     historicoVariacao[chave].append(0.0)
