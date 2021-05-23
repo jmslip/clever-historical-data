@@ -39,7 +39,6 @@ class Calculos(Resource):
         else:
             for ativo in moderado:
                 pesquisa = ativosService.pesquisa(ativo=ativo)
-                print(pesquisa)
                 ativosParaCalculo.append(pesquisa.symbol)
 
 
