@@ -20,7 +20,7 @@ class Calculos:
             if len(historico_ativo['historico']) > 0:
                 historico[ativo] = historico_ativo
             else:
-                historico[ativo] = {'historico': ['0.0']}
+                historico[ativo] = {'historico': [{'variacao':'0.0'}]}
         
         desvioPadrao = self.calculaDesvioPadrao(historico=historico)
         
