@@ -23,8 +23,6 @@ class Calculos(Resource):
     def get():
         request = api.payload
 
-        return request
-
         err = clever_generics.valida_parametros_obrigatorios(request=request, parametros=parametros_obrigatorios)
 
         if err is not None:
@@ -46,8 +44,7 @@ class Calculos(Resource):
 
         ativos = request['ativos']
         for ativo in ativos:
-            for valor in ativo:
-                ativosParaCalculo.append(valor)
+            ativosParaCalculo.append(ativo)
 
         return calculosService.rd(ativos=ativosParaCalculo)
         
