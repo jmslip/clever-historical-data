@@ -20,7 +20,7 @@ class Calculos:
             if ativo == 'BOVA11':
                 print(historico_ativo)
                 print(len(historico_ativo))
-            if historico_ativo is not None or len(historico_ativo) > 0:
+            if historico_ativo is not None or len(historico_ativo['historico']) > 0:
                 historico[ativo] = historico_ativo
         
         desvioPadrao = self.calculaDesvioPadrao(historico=historico)
