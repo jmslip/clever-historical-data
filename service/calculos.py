@@ -17,11 +17,10 @@ class Calculos:
         historico = dict()
         for ativo in ativos:
             historico_ativo = self.historicoService.passado(ativo, to_date=to_date, from_date=from_date, model_to_json=True)
-            if ativo == 'BOVA11':
-                print(historico_ativo)
-                print(len(historico_ativo['historico']))
             if len(historico_ativo['historico']) > 0:
                 historico[ativo] = historico_ativo
+            else:
+                historico[ativo] = [0.0]
         
         desvioPadrao = self.calculaDesvioPadrao(historico=historico)
         
