@@ -1,6 +1,7 @@
 from datetime import timedelta, datetime
 import pandas as pd
 import numpy as np
+import array
 
 from service.historico import HistoricoService
 from utils.clever_generics import CleverGenerics
@@ -35,10 +36,25 @@ class Calculos:
             for item in historico[ativo]['historico']:
                 variacao.append(float(item['variacao']))
             historicoVariacao[ativo] = variacao
+            
+        self.igualaTamanhoListasHistorico(historicoVariacao)
 
         df = pd.DataFrame(historicoVariacao)
         dp = df.std()
         return  pd.DataFrame(dp).transpose()
+
+    def igualaTamanhoListasHistorico(self, historicoVariacao: dict):
+        maior = 0
+        for chave in historicoVariacao:
+            aux = len(historicoVariacao[chave])
+            if (aux > maior):
+                maior = aux
+        
+        for chave in historicoVariacao:
+            print(chave + " : " + str(len(historicoVariacao[chave])))
+            if len(historicoVariacao[chave]) < maior:
+                for i in range(maior - len(historicoVariacao[chave])):
+                    historicoVariacao[chave].append(0.0)
 
     def normalize(self, x):
         return 1/x

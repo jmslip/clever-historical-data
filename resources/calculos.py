@@ -14,7 +14,7 @@ ativosService = Ativos()
 parametros_obrigatorios = ['ativos', 'perfil']
 
 conservador = 'B5P211'
-agressivo = '0P0001HL9K'
+agressivo = 'IMAB11'
 moderado = [conservador, agressivo]
 
 @api.route('/calculos')
@@ -28,8 +28,8 @@ class Calculos(Resource):
         if err is not None:
             return err
         
-        perfil = request['perfil']
         ativosParaCalculo = []
+        perfil = request['perfil']
         if perfil == '1':
             pesquisa = ativosService.pesquisa(ativo=conservador)
             ativosParaCalculo.append(pesquisa.symbol)
@@ -39,6 +39,7 @@ class Calculos(Resource):
         else:
             for ativo in moderado:
                 pesquisa = ativosService.pesquisa(ativo=ativo)
+                print(pesquisa)
                 ativosParaCalculo.append(pesquisa.symbol)
 
 
