@@ -16,7 +16,9 @@ class Calculos:
         to_date = self.clever_generics.data_formato_banco(datetime.today())
         historico = dict()
         for ativo in ativos:
-            historico[ativo] = self.historicoService.passado(ativo, to_date=to_date, from_date=from_date, model_to_json=True)
+            historico_ativo = self.historicoService.passado(ativo, to_date=to_date, from_date=from_date, model_to_json=True)
+            if historico_ativo is not None:
+                historico[ativo] = historico_ativo
         
         desvioPadrao = self.calculaDesvioPadrao(historico=historico)
         
