@@ -17,6 +17,7 @@ class Calculos:
         historico = dict()
         for ativo in ativos:
             historico_ativo = self.historicoService.passado(ativo, to_date=to_date, from_date=from_date, model_to_json=True)
+            print(historico_ativo)
             if historico_ativo is not None:
                 historico[ativo] = historico_ativo
         
