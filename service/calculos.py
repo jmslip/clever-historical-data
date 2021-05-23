@@ -65,6 +65,7 @@ class Calculos:
         return 1/x
 
     def getSomaDesvio(self, desvio):
+        print(desvio)
         somaDesvioSeries = desvio.sum(axis=1)
         somaDesvio = somaDesvioSeries.values
         return somaDesvio[0]
