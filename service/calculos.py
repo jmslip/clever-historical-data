@@ -60,6 +60,8 @@ class Calculos:
                     historicoVariacao[chave].append(0.0)
 
     def normalize(self, x):
+        if x.item() == 0.0:
+            return 0.0
         return 1/x
 
     def getSomaDesvio(self, desvio):
