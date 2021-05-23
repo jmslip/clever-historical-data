@@ -23,6 +23,8 @@ class Calculos(Resource):
     def get():
         request = api.payload
 
+        return request
+
         err = clever_generics.valida_parametros_obrigatorios(request=request, parametros=parametros_obrigatorios)
 
         if err is not None:
