@@ -61,6 +61,7 @@ class Calculos:
 
     def normalize(self, x):
         if x.item() == 0.0:
+            print(x)
             return 0.0
         return 1/x
 
