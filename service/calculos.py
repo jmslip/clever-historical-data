@@ -17,8 +17,10 @@ class Calculos:
         historico = dict()
         for ativo in ativos:
             historico_ativo = self.historicoService.passado(ativo, to_date=to_date, from_date=from_date, model_to_json=True)
-            if historico_ativo is not None:
+            if len(historico_ativo['historico']) > 0:
                 historico[ativo] = historico_ativo
+            else:
+                historico[ativo] = {'historico': [{'variacao':'0.0'}]}
         
         desvioPadrao = self.calculaDesvioPadrao(historico=historico)
         
@@ -58,9 +60,13 @@ class Calculos:
                     historicoVariacao[chave].append(0.0)
 
     def normalize(self, x):
+        if x.item() == 0.0:
+            print(x)
+            return 0.0
         return 1/x
 
     def getSomaDesvio(self, desvio):
+        print(desvio)
         somaDesvioSeries = desvio.sum(axis=1)
         somaDesvio = somaDesvioSeries.values
         return somaDesvio[0]

@@ -44,8 +44,7 @@ class Calculos(Resource):
 
         ativos = request['ativos']
         for ativo in ativos:
-            for valor in ativo:
-                ativosParaCalculo.append(valor)
+            ativosParaCalculo.append(ativo)
 
         return calculosService.rd(ativos=ativosParaCalculo)
         
