@@ -11,7 +11,7 @@ api = server.api
 clever_generics = CleverGenerics()
 ativosService = Ativos()
 
-parametros = ['simbolo', 'pais']
+parametros = ['simbolo', 'pais', 'nome']
 parametros_obrigatorios = ['simbolo']
 
 
@@ -37,17 +37,23 @@ class Ativo(Resource):
         if isinstance(pesquisa, str):
             return pesquisa
 
+        nome = None
+        if 'nome' in request:
+            nome = request['nome']
+
         ativoModel = AtivoModel()
-        if isinstance(pesquisa, list):
-            for ativo in pesquisa:
-                ativoModel = AtivoModel(
-                    id = ativo.id_,
-                    simbolo = ativo.symbol,
-                    nome = ativo.name,
-                    pais = ativo.country
-                )
+        if nome is None:
+            nome = pesquisa.name
+
 
         try:
+            ativoModel = AtivoModel(
+                id = pesquisa.id_,
+                simbolo = pesquisa.symbol,
+                nome = nome,
+                pais = pesquisa.country
+            )
+
             ativoModel.save(force_insert=True)
         except IntegrityError as e:
             print("Erro ao salvar Ativo: ", e)
@@ -55,6 +61,9 @@ class Ativo(Resource):
             for err in error:
                 if 'duplicate key' in err:
                     return clever_generics.gera_resposta(clever_generics.err05, id=ativoModel.get_id())
+            return clever_generics.gera_resposta(clever_generics.err04)
+        except AttributeError as ae:
+            print("Erro ao salvar Ativo: ", ae)
             return clever_generics.gera_resposta(clever_generics.err04)
 
         return clever_generics.model_to_json(ativoModel, AtivoModel), 201
