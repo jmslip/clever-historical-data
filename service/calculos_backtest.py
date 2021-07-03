@@ -100,8 +100,8 @@ class CalculosBackTest(CalculosGeral):
         return a * b - 1
 
     def indicice_ipca(self, data_inicial: str, data_final: str) -> float:
-        data_inicial = self.clever_generics.str_data_formato_br(data_inicial, "%Y-%m-%d")
-        data_final = self.clever_generics.str_data_formato_br(data_final, "%Y-%m-%d")
+        data_inicial = self.clever_generics.formata_datestr(data_inicial, "%Y-%m-%d")
+        data_final = self.clever_generics.formata_datestr(data_final, "%Y-%m-%d")
 
         ## 433 == IPCA
         url = 'http://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json'
