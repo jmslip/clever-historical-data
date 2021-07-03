@@ -11,6 +11,7 @@ class CalculosGeral:
         self.historico_service = HistoricoService()
         self.clever_generics = CleverGenerics()
         self.key_carteria = 'Carteira'
+        self.key_inflacao_meta = 'Inflacao_meta'
 
     def rd_default(self, ativos, from_date, to_date):
         historico = self.get_historico(
