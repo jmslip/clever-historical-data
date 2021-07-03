@@ -46,5 +46,4 @@ class Calculos(Resource):
         for ativo in ativos:
             ativosParaCalculo.append(ativo)
 
-        return calculosService.rd(ativos=ativosParaCalculo)
-        
+        return calculosService.calculo_carteira_bt(ativos=ativosParaCalculo)
