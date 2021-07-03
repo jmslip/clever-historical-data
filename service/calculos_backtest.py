@@ -9,7 +9,7 @@ class CalculosBackTest(CalculosGeral):
     def __init__(self) -> None:
         super().__init__()
 
-    def calculo(self, ativos) -> dict:
+    def calculo(self, ativos, percentual_risco: float) -> dict:
         rd = self.rd_backtest(ativos=ativos)
         from_date, to_date = self.get_from_and_to_date()
         historico = self.get_historico(
@@ -20,7 +20,7 @@ class CalculosBackTest(CalculosGeral):
         carteira_df = self.obtem_carteira_historico(rd=rd, historico=historico_bt)
         indice_ipca = self.indicice_ipca(from_date, to_date)
         periodos = self.obtem_quantidade_periodos(historico=historico)
-        indice_perfil = round((indice_ipca + 0.12), 4)
+        indice_perfil = round((indice_ipca + percentual_risco), 4)
         taxa_equivalente = round(((1 + indice_perfil) ** (1/periodos) - 1), 4)
         backtest = self.obtem_inflacao_meta(periodos=periodos, taxa_equivalente=taxa_equivalente, carteira_df=carteira_df).fillna(0.0)
 
