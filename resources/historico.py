@@ -69,20 +69,20 @@ class Historico(Resource):
             file_decode = base64.decodebytes(arquivo_csv)
             file_to_save.write(file_decode)
 
-        historicoModel = HistoricalData
+        historico_model = HistoricalData
         with open(filename, 'r') as ficheiro:
             reader = csv.reader(ficheiro, delimiter=';')
             for row in reader:
                 if row[0] == 'data_historico':
                     continue
-                historicoModel = HistoricalData(
-                    data_historico = row[0],
+                historico_model = HistoricalData(
+                    data_historico = clever_generics.formata_datestr(strdata=row[0], pattern="%d/%m/%Y", typefor='bd'),
                     variacao = row[1],
                     ativo = AtivoModel().select().where(AtivoModel.id == int(row[2])).get()
                 )
 
                 try:
-                    historicoModel.save()
+                    historico_model.save()
                 except IntegrityError as e:
                     print("Erro ao salvar histórico: ", e)
                     error = e.args
