@@ -104,10 +104,15 @@ class CleverGenerics:
             return round(dt, 2)
 
 
-    def data_formato_br(self, dt):
+    def data_formato_br(self, dt) -> str:
         if isinstance(dt, datetime) or isinstance(dt, date):
             return dt.strftime("%d/%m/%Y")
 
-    def data_formato_banco(self, dt):
+    def data_formato_banco(self, dt) -> str:
         if isinstance(dt, datetime) or isinstance(dt, date):
             return dt.strftime("%Y-%m-%d")
+
+    def str_data_formato_br(self, strdata: str, format: str) -> str:
+        if isinstance(strdata, str):
+            dt = datetime.strptime(strdata, format)
+            return self.data_formato_br(dt)

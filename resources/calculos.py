@@ -4,10 +4,12 @@ import pandas
 from core.server import server
 from service.ativos import Ativos
 from service.calculos import Calculos as CalculosService
+from service.calculos_backtest import CalculosBackTest as CalculosBTService
 from utils.clever_generics import CleverGenerics
 
 api = server.api
 calculosService = CalculosService()
+calculosBtService = CalculosBTService()
 clever_generics = CleverGenerics()
 ativosService = Ativos()
 
@@ -28,23 +30,29 @@ class Calculos(Resource):
         if err is not None:
             return err
         
-        ativosParaCalculo = []
+        ativos_para_calculo = []
         perfil = request['perfil']
         if perfil == '1':
             pesquisa = ativosService.pesquisa(ativo=conservador)
-            ativosParaCalculo.append(pesquisa.symbol)
+            ativos_para_calculo.append(pesquisa.symbol)
         elif perfil == '3':
             pesquisa = ativosService.pesquisa(ativo=agressivo)
-            ativosParaCalculo.append(pesquisa.symbol)
+            ativos_para_calculo.append(pesquisa.symbol)
         else:
             for ativo in moderado:
                 pesquisa = ativosService.pesquisa(ativo=ativo)
-                ativosParaCalculo.append(pesquisa.symbol)
+                ativos_para_calculo.append(pesquisa.symbol)
 
 
         ativos = request['ativos']
         for ativo in ativos:
-            ativosParaCalculo.append(ativo)
+            ativos_para_calculo.append(ativo)
 
-        return calculosService.rd(ativos=ativosParaCalculo)
-        
+        is_backtest = False;
+        if 'backtest' in request:
+            is_backtest = request['backtest']
+
+        if is_backtest:
+            return calculosBtService.calculo(ativos=ativos_para_calculo)
+
+        return calculosService.calculo(ativos=ativos_para_calculo)
