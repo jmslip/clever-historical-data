@@ -1,75 +1,22 @@
 from datetime import timedelta, datetime
+from typing import OrderedDict
 import pandas as pd
 import numpy as np
 import array
 
+from pandas.core.frame import DataFrame
+from service.calculos_geral import CalculosGeral
+
 from service.historico import HistoricoService
 from utils.clever_generics import CleverGenerics
 
-class Calculos:
+
+class Calculos(CalculosGeral):
+
     def __init__(self) -> None:
-        self.historicoService = HistoricoService()
-        self.clever_generics = CleverGenerics()
+        super().__init__()
 
-    def rd(self, ativos):
-        from_date = self.clever_generics.data_formato_banco((datetime.today() + timedelta(days=-365*2)))
-        to_date = self.clever_generics.data_formato_banco(datetime.today())
-        historico = dict()
-        for ativo in ativos:
-            historico_ativo = self.historicoService.passado(ativo, to_date=to_date, from_date=from_date, model_to_json=True)
-            if len(historico_ativo['historico']) > 0:
-                historico[ativo] = historico_ativo
-            else:
-                historico[ativo] = {'historico': [{'variacao':'0.0'}]}
-        
-        desvioPadrao = self.calculaDesvioPadrao(historico=historico)
-        
-        desvioNormalizado = desvioPadrao.apply(self.normalize)
-        somaDesvioNormalizado = self.getSomaDesvio(desvioNormalizado)
+    def calculo(self, ativos):
+        from_date, to_date = self.get_from_and_to_date()
 
-        rd = dict()
-        for chave, item in desvioNormalizado.iteritems():
-            rd[chave] = self.calculaRd(item[0], somaDesvioNormalizado)
-        
-        return rd
-
-    def calculaDesvioPadrao(self, historico: dict):
-        historicoVariacao = dict()
-        for ativo in historico:
-            variacao = []
-            for item in historico[ativo]['historico']:
-                variacao.append(float(item['variacao']))
-            historicoVariacao[ativo] = variacao
-            
-        self.igualaTamanhoListasHistorico(historicoVariacao)
-
-        df = pd.DataFrame(historicoVariacao)
-        dp = df.std()
-        return  pd.DataFrame(dp).transpose()
-
-    def igualaTamanhoListasHistorico(self, historicoVariacao: dict):
-        maior = 0
-        for chave in historicoVariacao:
-            aux = len(historicoVariacao[chave])
-            if (aux > maior):
-                maior = aux
-        
-        for chave in historicoVariacao:
-            if len(historicoVariacao[chave]) < maior:
-                for i in range(maior - len(historicoVariacao[chave])):
-                    historicoVariacao[chave].append(0.0)
-
-    def normalize(self, x):
-        if x.item() == 0.0:
-            print(x)
-            return 0.0
-        return 1/x
-
-    def getSomaDesvio(self, desvio):
-        print(desvio)
-        somaDesvioSeries = desvio.sum(axis=1)
-        somaDesvio = somaDesvioSeries.values
-        return somaDesvio[0]
-
-    def calculaRd(self, desvioNormalizado, somaDesvioNormalizado):
-        return (desvioNormalizado / somaDesvioNormalizado)
+        return self.rd_default(ativos=ativos, from_date=from_date, to_date=to_date)
