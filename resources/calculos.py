@@ -31,17 +31,21 @@ class Calculos(Resource):
             return err
         
         ativos_para_calculo = []
+        risco = 0.0
         perfil = request['perfil']
         if perfil == '1':
             pesquisa = ativosService.pesquisa(ativo=conservador)
             ativos_para_calculo.append(pesquisa.symbol)
+            risco = 0.02
         elif perfil == '3':
             pesquisa = ativosService.pesquisa(ativo=agressivo)
             ativos_para_calculo.append(pesquisa.symbol)
+            risco = 0.06
         else:
             for ativo in moderado:
                 pesquisa = ativosService.pesquisa(ativo=ativo)
                 ativos_para_calculo.append(pesquisa.symbol)
+            risco = 0.04
 
 
         ativos = request['ativos']
@@ -53,6 +57,6 @@ class Calculos(Resource):
             is_backtest = request['backtest']
 
         if is_backtest:
-            return calculosBtService.calculo(ativos=ativos_para_calculo)
+            return calculosBtService.calculo(ativos=ativos_para_calculo, percentual_risco=risco)
 
         return calculosService.calculo(ativos=ativos_para_calculo)
