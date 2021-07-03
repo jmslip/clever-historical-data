@@ -48,4 +48,11 @@ class Calculos(Resource):
         for ativo in ativos:
             ativos_para_calculo.append(ativo)
 
-        return calculosService.rd(ativos=ativos_para_calculo)
+        is_backtest = False;
+        if 'backtest' in request:
+            is_backtest = request['backtest']
+
+        if is_backtest:
+            return calculosBtService.calculo(ativos=ativos_para_calculo)
+
+        return calculosService.calculo(ativos=ativos_para_calculo)
