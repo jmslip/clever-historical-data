@@ -16,7 +16,7 @@ class Calculos(CalculosGeral):
     def __init__(self) -> None:
         super().__init__()
 
-    def rd(self, ativos):
+    def calculo(self, ativos):
         from_date, to_date = self.get_from_and_to_date()
 
         return self.rd_default(ativos=ativos, from_date=from_date, to_date=to_date)

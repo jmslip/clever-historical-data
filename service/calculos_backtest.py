@@ -9,15 +9,7 @@ class CalculosBackTest(CalculosGeral):
     def __init__(self) -> None:
         super().__init__()
 
-    def rd_backtest(self, ativos) -> dict:
-        from_date = self.clever_generics.data_formato_banco(
-            (datetime.today() + timedelta(days=-365*4)))
-        to_date = self.clever_generics.data_formato_banco(
-            (datetime.today() + timedelta(days=-365*2)))
-
-        return self.rd_default(ativos=ativos, from_date=from_date, to_date=to_date)
-
-    def calculo_carteira_bt(self, ativos):
+    def calculo(self, ativos) -> dict:
         rd = self.rd_backtest(ativos=ativos)
         from_date, to_date = self.get_from_and_to_date()
         historico = self.get_historico(
@@ -33,6 +25,14 @@ class CalculosBackTest(CalculosGeral):
         backtest = self.obtem_inflacao_meta(periodos=periodos, taxa_equivalente=taxa_equivalente, carteira_df=carteira_df).fillna(0.0)
 
         return backtest.to_dict()
+
+    def rd_backtest(self, ativos) -> dict:
+        from_date = self.clever_generics.data_formato_banco(
+            (datetime.today() + timedelta(days=-365*4)))
+        to_date = self.clever_generics.data_formato_banco(
+            (datetime.today() + timedelta(days=-365*2)))
+
+        return self.rd_default(ativos=ativos, from_date=from_date, to_date=to_date)
 
     def obtem_quantidade_periodos(self, historico: dict) -> int:
         for i in historico:
